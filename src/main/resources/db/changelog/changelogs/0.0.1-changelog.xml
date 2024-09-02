@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.27.xsd">
+
+
+    <changeSet id="1" author="inditex">
+        <createTable tableName="brand">
+            <column name="id" type="bigint">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="pk_brand_id"/>
+            </column>
+            <column name="brand_group_id" type="bigint"/>
+            <column name="brand_group_code" type="varchar(50)"/>
+        </createTable>
+
+        <createTable tableName="product">
+            <column name="id" type="bigint">
+                <constraints nullable="false" primaryKeyName="pk_product_id" primaryKey="true"/>
+            </column>
+            <column name="brand_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_product_brand" references="brand(id)"/>
+            </column>
+            <column name="type" type="varchar(50)"/>
+            <column name="kind" type="varchar(100)"/>
+            <column name="state" type="varchar(100)"/>
+            <column name="name" type="varchar(200)"/>
+            <column name="section" type="bigint"/>
+            <column name="section_name" type="varchar(200)"/>
+            <column name="family_id" type="bigint"/>
+            <column name="family_name" type="varchar(200)"/>
+            <column name="subfamily_id" type="bigint"/>
+            <column name="subfamily_name" type="varchar(200)"/>
+            <column name="first_visible_date" type="TIMESTAMP WITH TIMEZONE"/>
+        </createTable>
+
+        <createTable tableName="price">
+            <column name="price_list" type = "bigint">
+                <constraints nullable="false" primaryKeyName="pk_price_id" primaryKey="true"/>
+            </column>
+            <column name="brand_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_price_brand" references="brand(id)"/>
+            </column>
+            <column name="product_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_price_product" references="product(id)"/>
+            </column>
+            <column name="start_date" type="TIMESTAMP WITH TIMEZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="end_date" type="TIMESTAMP WITH TIMEZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="priority" type = "bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="price" type = "NUMERIC(20,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type = "varchar(3)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="inditex">
+        <createIndex indexName="i_prices_1" tableName="price">
+            <column name="start_date"/>
+            <column name="end_date"/>
+            <column name="priority"/>
+            <column name="price"/>
+            <column name="currency"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
